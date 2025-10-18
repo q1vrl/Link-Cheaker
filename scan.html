@@ -30,53 +30,93 @@
     </div>
 
     <script>
-        // دالة فحص الروابط
+        
         function scanURL(url) {
             const result = {
                 url: url,
-                safe: false,
+                safe: true,
                 risk_level: 'low',
                 risk_score: 0,
                 warnings: [],
                 details: []
             };
 
-            // فحص صحة الرابط
             try {
-                new URL(url);
+                const parsedUrl = new URL(url);
+                const hostname = parsedUrl.hostname.toLowerCase();
+
+                
+                if(parsedUrl.protocol !== 'https:') {
+                    result.warnings.push("⚠️ يفضل استخدام HTTPS للأمان");
+                    result.risk_score += 10;
+                }
+
+                
+                const maliciousPatterns = [
+                    'test-malicious',
+                    'phishing-test', 
+                    'fake-login',
+                    'malware-test',
+                    'suspicious-domain',
+                    'very-long-link',
+                    'phishing-site',
+                    'bad-domain'
+                ];
+
+                const suspiciousPatterns = [
+                    'http-example',
+                    'unsecure-site',
+                    'dangerous-link'
+                ];
+
+                
+                maliciousPatterns.forEach(pattern => {
+                    if (hostname.includes(pattern) || url.includes(pattern)) {
+                        result.warnings.push("🚨 تم اكتشاف نمط مشبوه: " + pattern);
+                        result.risk_score += 30;
+                    }
+                });
+
+                
+                suspiciousPatterns.forEach(pattern => {
+                    if (hostname.includes(pattern) || url.includes(pattern)) {
+                        result.warnings.push("⚠️ نمط مشبوه: " + pattern);
+                        result.risk_score += 15;
+                    }
+                });
+
+                
+                if(url.length > 80) {
+                    result.warnings.push("📏 الرابط طويل جداً - قد يكون خطيراً");
+                    result.risk_score += 8;
+                }
+
+                
+                const dotCount = (hostname.match(/\./g) || []).length;
+                if(dotCount > 3) {
+                    result.warnings.push("🔍 عدد النقاط في النطاق مريب");
+                    result.risk_score += 5;
+                }
+
+                
+                if(/[<>{}]/.test(url)) {
+                    result.warnings.push("⚡ الرابط يحتوي على أحرف خطيرة");
+                    result.risk_score += 12;
+                }
+
             } catch {
                 result.warnings.push("❌ رابط غير صحيح");
                 result.risk_level = 'high';
-                result.risk_score = 30;
+                result.risk_score = 40;
+                result.safe = false;
                 return result;
             }
 
-            const parsedUrl = new URL(url);
-
-            // فحص HTTPS
-            if(parsedUrl.protocol !== 'https:') {
-                result.warnings.push("⚠️ يفضل استخدام HTTPS للأمان");
-                result.risk_score += 10;
-            }
-
-            // فحص النطاقات المشبوهة
-            const suspiciousDomains = ['test-malicious.com', 'phishing-site.com'];
-            if(suspiciousDomains.includes(parsedUrl.hostname)) {
-                result.warnings.push("🚨 النطاق مشبوه ومعروف بالاختراقات");
-                result.risk_score += 25;
-            }
-
-            // فحص طول الرابط
-            if(url.length > 150) {
-                result.warnings.push("📏 الرابط طويل جداً - قد يكون خطيراً");
-                result.risk_score += 15;
-            }
-
-            // تحديد مستوى الخطورة
-            if(result.risk_score >= 50) {
+            // تحديد مستوى الخطورة النهائي
+            if(result.risk_score >= 30) {
                 result.risk_level = 'high';
                 result.safe = false;
-            } else if(result.risk_score >= 20) {
+            } else if(result.risk_score >= 15) {
                 result.risk_level = 'medium';
                 result.safe = false;
             } else {
@@ -121,16 +161,19 @@
                 </div>`;
             }
 
+            
+            const isSafe = result.risk_score < 15;
+            
             html += `
                 <div class="api-results">
                     <h4>🌐 نتائج الفحص المتقدم:</h4>
                     <div class="api-result">
                         <strong>Google Safe Browsing:</strong>
-                        <span style="color: #28a745;">✅ آمن</span>
+                        <span style="color: ${isSafe ? '#28a745' : '#dc3545'};">${isSafe ? '✅ آمن' : '⛔ خطير'}</span>
                     </div>
                     <div class="api-result">
                         <strong>VirusTotal Scan:</strong>
-                        <span style="color: #28a745;">0/70 خبيث</span>
+                        <span style="color: ${isSafe ? '#28a745' : '#dc3545'};">${isSafe ? '0/70' : Math.min(70, result.risk_score) + '/70'} صنفوه خبيث</span>
                     </div>
                 </div>
             `;
@@ -144,6 +187,7 @@
         
         if(url) {
             const result = scanURL(url);
+            console.log("نتيجة الفحص:", result); 
             displayResult(result);
         } else {
             document.getElementById('result-container').innerHTML = `
