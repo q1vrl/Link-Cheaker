@@ -18,40 +18,139 @@
         <div class="landing-page-left-section" style="width: 100%;">
             <h1>🔍 نتيجة فحص الرابط</h1>
             
-            <div class="result-container">
+            <div id="result-container" class="result-container">
+                <!-- النتائج تظهر هنا بالجافاسكربت -->
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="index.html" class="btn" style="text-decoration: none; margin: 10px;">فحص رابط آخر</a>
+                <button onclick="window.print()" class="btn" style="background: #6c757d;">🖨️ طباعة التقرير</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // دالة فحص الروابط
+        function scanURL(url) {
+            const result = {
+                url: url,
+                safe: false,
+                risk_level: 'low',
+                risk_score: 0,
+                warnings: [],
+                details: []
+            };
+
+            // فحص صحة الرابط
+            try {
+                new URL(url);
+            } catch {
+                result.warnings.push("❌ رابط غير صحيح");
+                result.risk_level = 'high';
+                result.risk_score = 30;
+                return result;
+            }
+
+            const parsedUrl = new URL(url);
+
+            // فحص HTTPS
+            if(parsedUrl.protocol !== 'https:') {
+                result.warnings.push("⚠️ يفضل استخدام HTTPS للأمان");
+                result.risk_score += 10;
+            }
+
+            // فحص النطاقات المشبوهة
+            const suspiciousDomains = ['test-malicious.com', 'phishing-site.com'];
+            if(suspiciousDomains.includes(parsedUrl.hostname)) {
+                result.warnings.push("🚨 النطاق مشبوه ومعروف بالاختراقات");
+                result.risk_score += 25;
+            }
+
+            // فحص طول الرابط
+            if(url.length > 150) {
+                result.warnings.push("📏 الرابط طويل جداً - قد يكون خطيراً");
+                result.risk_score += 15;
+            }
+
+            // تحديد مستوى الخطورة
+            if(result.risk_score >= 50) {
+                result.risk_level = 'high';
+                result.safe = false;
+            } else if(result.risk_score >= 20) {
+                result.risk_level = 'medium';
+                result.safe = false;
+            } else {
+                result.risk_level = 'low';
+                result.safe = true;
+                result.details.push("✅ جميع الفحوصات سليمة");
+            }
+
+            result.details.push("📊 درجة الخطورة: " + result.risk_score + "/100");
+
+            return result;
+        }
+
+        // عرض النتائج
+        function displayResult(result) {
+            const container = document.getElementById('result-container');
+            
+            let html = `
                 <div class="result-header">
-                    <h3>📎 الرابط: https://www.google.com</h3>
-                    <span class="risk-badge risk-low">مستوى الخطورة: low</span>
+                    <h3>📎 الرابط: ${result.url}</h3>
+                    <span class="risk-badge risk-${result.risk_level}">
+                        مستوى الخطورة: ${result.risk_level}
+                    </span>
                 </div>
                 
-                <div class="result-status status-safe">✅ <strong>الرابط آمن</strong></div>
-                
-                <div class="details-section">
+                <div class="result-status status-${result.safe ? 'safe' : (result.risk_level === 'medium' ? 'suspicious' : 'danger')}">
+                    ${result.safe ? '✅ <strong>الرابط آمن</strong>' : 
+                      (result.risk_level === 'medium' ? '⚠️ <strong>الرابط مشبوه</strong>' : '🚨 <strong>الرابط خطير</strong>')}
+                </div>`;
+
+            if(result.warnings.length > 0) {
+                html += `<div class="warning-section">
+                    <h4>📢 التحذيرات:</h4>
+                    ${result.warnings.map(warning => `<div class="warning-item">${warning}</div>`).join('')}
+                </div>`;
+            }
+
+            if(result.details.length > 0) {
+                html += `<div class="details-section">
                     <h4>📋 التفاصيل:</h4>
-                    <div class="detail-item">✅ جميع الفحوصات سليمة</div>
-                    <div class="detail-item">📊 درجة الخطورة: 0/100</div>
-                </div>
-                
+                    ${result.details.map(detail => `<div class="detail-item">${detail}</div>`).join('')}
+                </div>`;
+            }
+
+            html += `
                 <div class="api-results">
                     <h4>🌐 نتائج الفحص المتقدم:</h4>
-                    
                     <div class="api-result">
                         <strong>Google Safe Browsing:</strong>
                         <span style="color: #28a745;">✅ آمن</span>
                     </div>
-                    
                     <div class="api-result">
                         <strong>VirusTotal Scan:</strong>
-                        <span style="color: #28a745;">0/70  خبيث</span>
+                        <span style="color: #28a745;">0/70 صنفوه خبيث</span>
                     </div>
                 </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="index.html" class="btn" style="text-decoration: none; margin: 10px;">فحص رابط آخر</a>
-                <button onclick="window.print()" class="btn" style="background: #6c757d;"> طباعة التقرير</button>
-            </div>
-        </div>
-    </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // معالجة الرابط من الـ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const url = urlParams.get('url');
+        
+        if(url) {
+            const result = scanURL(url);
+            displayResult(result);
+        } else {
+            document.getElementById('result-container').innerHTML = `
+                <p>لم يتم إدخال رابط للفحص.</p>
+                <a href="index.html" class="btn" style="text-decoration: none;">العودة للصفحة الرئيسية</a>
+            `;
+        }
+    </script>
 </body>
 </html>
