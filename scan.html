@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>نتيجة الفحص - Link Checker</title>
+</head>
+<body class="body">
+    <div class="header"> 
+        <h1>Link Checker</h1>
+        <div class="links">
+            <a href="index.html">الرئيسية</a>
+            <a href="about.html">من نحن</a>
+        </div>
+    </div>
+
+    <div class="landing-page">
+        <div class="landing-page-left-section" style="width: 100%;">
+            <h1>🔍 نتيجة فحص الرابط</h1>
+            
+            <div class="result-container">
+                <div class="result-header">
+                    <h3>📎 الرابط: https://www.google.com</h3>
+                    <span class="risk-badge risk-low">مستوى الخطورة: low</span>
+                </div>
+                
+                <div class="result-status status-safe">✅ <strong>الرابط آمن</strong></div>
+                
+                <div class="details-section">
+                    <h4>📋 التفاصيل:</h4>
+                    <div class="detail-item">✅ جميع الفحوصات سليمة</div>
+                    <div class="detail-item">📊 درجة الخطورة: 0/100</div>
+                </div>
+                
+                <div class="api-results">
+                    <h4>🌐 نتائج الفحص المتقدم:</h4>
+                    
+                    <div class="api-result">
+                        <strong>Google Safe Browsing:</strong>
+                        <span style="color: #28a745;">✅ آمن</span>
+                    </div>
+                    
+                    <div class="api-result">
+                        <strong>VirusTotal Scan:</strong>
+                        <span style="color: #28a745;">0/70  خبيث</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="index.html" class="btn" style="text-decoration: none; margin: 10px;">فحص رابط آخر</a>
+                <button onclick="window.print()" class="btn" style="background: #6c757d;"> طباعة التقرير</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

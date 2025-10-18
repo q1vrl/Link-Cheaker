@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>Link Checker - فحص الروابط الآمن</title>
+</head>
+<body class="body">
+    <!-- Header -->
+    <div class="header"> 
+        <h1>🔗 Link Checker</h1>
+        <div class="links">
+            <a href="home.html" style="background: #0093c4; border-radius: 15px;">الرئيسية</a>
+            <a href="about.html">من نحن</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="landing-page">
+            <div class="landing-page-left-section">
+                <span class="hero-subtitle">🚀 أهلاً بك في</span>
+                <h1 class="hero-title">Link Checker</h1>
+                <p class="hero-subtitle">افحص أي رابط خلال ثواني وتأكد من أمانه قبل الضغط</p>
+                
+                <!-- Scan Box -->
+                <div class="scan-box">
+                    <h3 style="color: #333; margin-bottom: 20px;"> افحص رابط الآن</h3>
+                    <form action="scan.php" method="POST" class="landing-page-check">
+                        <input type="text" name="url" placeholder="https://example.com" required 
+                               class="form-input-large" />
+                        <button type="submit" class="btn btn-absolute">فحص الرابط</button>
+                    </form>
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">
+                       
+                    </p>
+                </div>
+            </div>
+            
+            <div class="landing-page-img-container">
+                <img src="LinkChecerIcon.jpeg" alt="Link Checker" class="img-shadow" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="section-padding section-light">
+        <div class="container">
+            <h2 class="text-center" style="color: #333; margin-bottom: 50px; font-size: 2.5rem;">✨ لماذا تختار Link Checker؟</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>حماية متقدمة</h3>
+                    <p>نحميك من مواقع التصيد والبرمجيات الخبيثة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>سرعة فائقة</h3>
+                    <p>نتائج فورية خلال ثواني معدودة</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>فحص دقيق</h3>
+                    <p>تحليل شامل باستخدام أحدث التقنيات</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>تقارير مفصلة</h3>
+                    <p>نتائج واضحة وتوصيات عملية</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="section-padding section-white text-center">
+        <h2 style="color: #333; margin-bottom: 40px;">📈 إحصائياتنا</h2>
+        <div class="stats-container">
+            <div class="stat-item">
+                <span class="stat-number">10,000+</span>
+                <span class="stat-label">رابط تم فحصه</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">99%</span>
+                <span class="stat-label">دقة في النتائج</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">خدمة مستمرة</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">0.5s</span>
+                <span class="stat-label">متوسط وقت الفحص</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="section-padding section-gradient text-center">
+        <h2 style="font-size: 2.5rem; margin-bottom: 20px;">🚀 جرب الآن مجاناً!</h2>
+        <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">
+            لا تنتظر حتى يصبح الأوان متأخراً. افحص روابطك الآن وكن آمناً
+        </p>
+        <a href="#scan" class="cta-button">ابدأ الفحص المجاني</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="section-dark text-center" style="padding: 30px;">
+        <p>© 2025 Link Checker - مشروع تخرج الأمن السيبراني</p>
+        <p>🛡️ حمايتك تهمنا</p>
+    </div>
+
+    <script>
+        
+        document.querySelector('a[href="#scan"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.querySelector('.scan-box').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        });
+    </script>
+</body>
+</html>
