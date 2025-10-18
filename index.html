@@ -8,9 +8,9 @@
 <body class="body">
     <!-- Header -->
     <div class="header"> 
-        <h1>🔗 Link Checker</h1>
+        <h1> Link Checker</h1>
         <div class="links">
-            <a href="home.html" style="background: #0093c4; border-radius: 15px;">الرئيسية</a>
+            <a href="index.html" style="background: #0093c4; border-radius: 15px;">الرئيسية</a>
             <a href="about.html">من نحن</a>
         </div>
     </div>
@@ -24,18 +24,19 @@
                 <p class="hero-subtitle">افحص أي رابط خلال ثواني وتأكد من أمانه قبل الضغط</p>
                 
                 <!-- Scan Box -->
-                <div class="scan-box">
-                    <h3 style="color: #333; margin-bottom: 20px;"> افحص رابط الآن</h3>
-                    <form action="scan.php" method="POST" class="landing-page-check">
-                        <input type="text" name="url" placeholder="https://example.com" required 
-                               class="form-input-large" />
-                        <button type="submit" class="btn btn-absolute">فحص الرابط</button>
-                    </form>
-                    <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">
-                       
-                    </p>
-                </div>
-            </div>
+               <div class="scan-box" id="scan">
+    <h3 style="color: #333; margin-bottom: 20px;">🔍 افحص رابط الآن</h3>
+    
+    <div class="landing-page-check">
+        <input type="text" id="urlInput" placeholder="https://example.com" required 
+               class="form-input-large" />
+        <button type="button" id="scanButton" class="btn btn-absolute">فحص الرابط</button>
+    </div>
+    
+    <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">
+     
+    </p>
+</div>
             
             <div class="landing-page-img-container">
                 <img src="LinkChecerIcon.jpeg" alt="Link Checker" class="img-shadow" />
@@ -115,13 +116,38 @@
     </div>
 
     <script>
+   
+    document.getElementById('scanButton').addEventListener('click', function() {
+        const urlInput = document.getElementById('urlInput');
+        const url = urlInput.value.trim();
         
-        document.querySelector('a[href="#scan"]').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelector('.scan-box').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
+        if(url) {
+            // التأكد من أن الرابط يبدأ بـ http:// أو https://
+            let finalUrl = url;
+            if(!url.startsWith('http://') && !url.startsWith('https://')) {
+                finalUrl = 'https://' + url;
+            }
+            
+            window.location.href = 'scan.html?url=' + encodeURIComponent(finalUrl);
+        } else {
+            alert('⚠️ الرجاء إدخال رابط للفحص');
+        }
+    });
+
+
+    document.getElementById('urlInput').addEventListener('keypress', function(e) {
+        if(e.key === 'Enter') {
+            document.getElementById('scanButton').click();
+        }
+    });
+
+    
+    document.querySelector('a[href="#scan"]').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector('.scan-box').scrollIntoView({ 
+            behavior: 'smooth' 
         });
-    </script>
+    });
+</script>
 </body>
 </html>
